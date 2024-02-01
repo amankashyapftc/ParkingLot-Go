@@ -11,7 +11,6 @@ type Car struct {
 	color              string
 }
 
-// NewCar creates a new instance of Car
 func NewCar(registrationNumber, color string) (*Car, error) {
 	if err := validateRegistrationNumber(registrationNumber, color); err != nil {
 		return nil, err
