@@ -6,55 +6,43 @@ import (
 	"github.com/google/uuid"
 )
 
-type Token struct {
-	Id string
-}
 type Slot struct {
 	SlotNumber int
 	ParkedCar  *Car
-	Token      *Token
+	Token      string
 }
 
-func NewSlot(slotNumber int, parkedCar *Car) *Slot {
-	return &Slot{
-		SlotNumber: slotNumber,
-		ParkedCar:  parkedCar,
-	}
+func NewSlot() *Slot {
+	return &Slot{}
 }
 
-func (s *Slot) Park(parkedCar *Car) (*Token, error) {
-	if s.ParkedCar != nil {
-		return nil, errors.New("slot is already occupied")
+func (s *Slot) park(car *Car) (string, error) {
+	if s.IsOccupied() {
+		return "", errors.New("Slot is occupied")
 	}
 
-	s.ParkedCar = parkedCar
-	token := &Token{
-		Id: uuid.New().String(),
-	}
-	s.Token = token
-	return token, nil
+	s.ParkedCar = car
+	token := uuid.New().String()
+	s.Token = string(token)
+	return s.Token, nil
 }
 
-func (s *Slot) IsCarPresent(targetCar *Car) bool {
-	return s.ParkedCar != nil && s.ParkedCar == targetCar
-}
-
-func (s *Slot) isVerifiedToken(token *Token) bool {
+func (s *Slot) isVerifiedToken(token string) bool {
 	return s.Token == token
 }
-func (s *Slot) UnPark(token *Token) error {
-	if s.ParkedCar == nil {
-		return errors.New("slot is already unoccupied")
+
+func (s *Slot) unPark(token string) (*Car, error) {
+	if !s.IsOccupied() {
+		return nil, errors.New("Slot is empty")
+	}
+	if !s.isVerifiedToken(token) {
+		return nil, errors.New("invalid token")
 	}
 
-	if token == nil || token.Id == "" {
-		return errors.New("invalid token")
-	}
-
-	if s.isVerifiedToken(token) {
-		s.ParkedCar = nil
-	}
-	return nil
+	res := s.ParkedCar
+	s.ParkedCar = nil
+	s.Token = ""
+	return res, nil
 }
 
 func (s *Slot) IsOccupied() bool {
