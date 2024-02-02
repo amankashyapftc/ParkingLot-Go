@@ -28,15 +28,8 @@ func (p *ParkingLot) isFull() bool {
 	return true
 }
 
-func (p *ParkingLot) park(car *Car, strategies ...Strategy) (string, error) {
-	var strategy Strategy
-	if len(strategies) > 0 {
-		strategy = strategies[0]
-	} else {
-		strategy = NEAREST
-	}
-
-	slot := strategy.GetAvailableSlot(p.slots)
+func (p *ParkingLot) park(car *Car, strategy Strategy) (string, error) {
+	slot := strategy.GetFreeSlot(p.slots)
 	if slot == nil {
 		return "", errors.New("parking lot is full")
 	}

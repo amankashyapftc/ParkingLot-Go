@@ -23,7 +23,7 @@ func (s *Slot) park(car *Car) (string, error) {
 
 	s.ParkedCar = car
 	token := uuid.New().String()
-	s.Token = string(token)
+	s.Token = token
 	return s.Token, nil
 }
 

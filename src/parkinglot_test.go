@@ -32,7 +32,7 @@ func TestParkCarACarInParkingLot(t *testing.T) {
 	parkingLot, _ := NewParkingLot(1)
 	car, _ := NewCar("UP78DH5678", "Green")
 
-	parkingLot.park(car)
+	parkingLot.park(car, NEAREST)
 
 	if !parkingLot.isFull() {
 		t.Errorf("Parking lot should be full.")
@@ -44,8 +44,8 @@ func TestParkCarInFullParkingLot(t *testing.T) {
 	car1, _ := NewCar("UP78DH5678", "Green")
 	car2, _ := NewCar("UP78DH5645", "Blue")
 
-	parkingLot.park(car1)
-	_, err := parkingLot.park(car2)
+	parkingLot.park(car1, NEAREST)
+	_, err := parkingLot.park(car2, NEAREST)
 
 	if err == nil {
 		t.Errorf("Can not park car in full parking lot.")
@@ -56,7 +56,7 @@ func TestUnParkCarUsingParkingLot(t *testing.T) {
 	parkingLot, _ := NewParkingLot(1)
 	car, _ := NewCar("UP78DH5678", "Green")
 
-	ticket, _ := parkingLot.park(car)
+	ticket, _ := parkingLot.park(car, NEAREST)
 	unparkedCar, _ := parkingLot.unPark(ticket)
 
 	if car != unparkedCar {
@@ -69,7 +69,7 @@ func TestUnParkCarFromWrongParkingLot(t *testing.T) {
 	parkingLot1, _ := NewParkingLot(1)
 	car, _ := NewCar("UP78DH5678", "Green")
 
-	ticket, _ := parkingLot.park(car)
+	ticket, _ := parkingLot.park(car, NEAREST)
 	_, err := parkingLot1.unPark(ticket)
 
 	if err == nil {
@@ -81,7 +81,7 @@ func TestUnParkCarUsingWrongTicket(t *testing.T) {
 	parkingLot, _ := NewParkingLot(1)
 	car, _ := NewCar("UP78DH5678", "Green")
 
-	parkingLot.park(car)
+	parkingLot.park(car, NEAREST)
 	_, err := parkingLot.unPark("Abc")
 
 	if err == nil {
@@ -93,7 +93,7 @@ func TestEmptySlotCount(t *testing.T) {
 	parkingLot, _ := NewParkingLot(2)
 	car, _ := NewCar("UP78DH5678", "Green")
 
-	parkingLot.park(car)
+	parkingLot.park(car, NEAREST)
 
 	if parkingLot.emptySlotCount() != 1 {
 		t.Errorf("empty slots count should be 1.")

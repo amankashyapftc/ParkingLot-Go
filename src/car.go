@@ -3,7 +3,6 @@ package src
 import (
 	"errors"
 	"regexp"
-	"strings"
 )
 
 type Car struct {
@@ -29,10 +28,10 @@ func validateRegistrationNumber(registrationNumber, color string) error {
 	return nil
 }
 
-func (c *Car) Equals(other *Car) bool {
-	return c.registrationNumber == other.registrationNumber && c.color == other.color
-}
+// func (c *Car) Equals(other *Car) bool {
+// 	return c.registrationNumber == other.registrationNumber && c.color == other.color
+// }
 
-func (c *Car) HasColor(targetColor string) bool {
-	return strings.EqualFold(c.color, targetColor)
-}
+// func (c *Car) HasColor(targetColor string) bool {
+// 	return strings.EqualFold(c.color, targetColor)
+// }

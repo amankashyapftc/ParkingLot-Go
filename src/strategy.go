@@ -1,5 +1,7 @@
 package src
 
+import "sort"
+
 type Strategy int
 
 const (
@@ -47,28 +49,28 @@ var strategies = map[Strategy]StrategyFunctions{
 			return nil
 		},
 	},
-	// DISTRIBUTED: {
-	// 	getParkingLots: func(parkingLots []*ParkingLot) []*ParkingLot {
-	// 		sort.Slice(parkingLots, func(i, j int) bool {
-	// 			return parkingLots[i].emptySlotCount() > parkingLots[j].emptySlotCount()
-	// 		})
-	// 		return parkingLots
-	// 	},
-	// 	getSlot: func(slots []*Slot) *Slot {
-	// 		for _, slot := range slots {
-	// 			if slot.isFree() {
-	// 				return slot
-	// 			}
-	// 		}
-	// 		return nil
-	// 	},
-	// },
+	DISTRIBUTED: {
+		getParkingLots: func(parkingLots []*ParkingLot) []*ParkingLot {
+			sort.Slice(parkingLots, func(i, j int) bool {
+				return parkingLots[i].emptySlotCount() > parkingLots[j].emptySlotCount()
+			})
+			return parkingLots
+		},
+		getSlot: func(slots []*Slot) *Slot {
+			for _, slot := range slots {
+				if !slot.IsOccupied() {
+					return slot
+				}
+			}
+			return nil
+		},
+	},
 }
 
-func (s Strategy) GetAvailableSlot(slots []*Slot) *Slot {
+func (s Strategy) GetFreeSlot(slots []*Slot) *Slot {
 	return strategies[s].getSlot(slots)
 }
 
-func (s Strategy) GetParkingLots(parkingLots []*ParkingLot) []*ParkingLot {
+func (s Strategy) GetAllFreeParkingLots(parkingLots []*ParkingLot) []*ParkingLot {
 	return strategies[s].getParkingLots(parkingLots)
 }
